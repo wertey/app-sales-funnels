@@ -1,0 +1,871 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample express server.",
+    "version": "1.0.0",
+    "title": "Swagger Doc",
+    "contact": {
+      "email": "yasinsky2015@gmail.com"
+    },
+    "license": {
+      "name": "ISC"
+    }
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations with Users"
+    },
+    {
+      "name": "stages",
+      "description": "Operations with Stages"
+    },
+    {
+      "name": "leagues",
+      "description": "Operations with Leagues"
+    },
+    {
+      "name": "races",
+      "description": "Operations with aces"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get users",
+        "description": "get list of all existing users",
+        "operationId": "getAllUser",
+        "responses": {
+          "200": {
+            "description": "sucsessful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Find User by ID",
+        "description": "Returns a single user",
+        "operationId": "getUserById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user by ID",
+        "description": "return update user",
+        "operationId": "updateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object that needs to be updated",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "sucsessful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user name for login and password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get some information about user",
+        "description": "",
+        "operationId": "getProfile",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "profile",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "400": {
+            "description": "failed operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": "successful"
+          }
+        }
+      }
+    },
+    "/users/registrated/league/{title}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Registrate user on correct league",
+        "description": "",
+        "operationId": "registrateLeague",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "404": {
+            "description": "League not found"
+          }
+        }
+      }
+    },
+    "/race/{login}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "provides a list of races for a specific user",
+        "description": "",
+        "operationId": "getUserWithRaces",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "404": {
+            "description": "not found"
+          }
+        }
+      }
+    },
+    "/league/{login}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "provides a list of leagues for a specific user",
+        "description": "",
+        "operationId": "getUserWithLeague",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "404": {
+            "description": "not found"
+          }
+        }
+      }
+    },
+    "/stage": {
+      "post": {
+        "tags": [
+          "stages"
+        ],
+        "summary": "Create stage",
+        "description": "",
+        "operationId": "createStage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "stages"
+        ],
+        "summary": "Get stages",
+        "description": "get list of all existing stages",
+        "operationId": "getAllStages",
+        "responses": {
+          "200": {
+            "description": "sucsessful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/stage"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "stages"
+        ],
+        "summary": "Update stage",
+        "description": "",
+        "operationId": "UpdateStage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update stage object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/stage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/stage/{stageId}": {
+      "get": {
+        "tags": [
+          "stages"
+        ],
+        "summary": "Find Stage by ID",
+        "description": "Returns a single stage",
+        "operationId": "getStageById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "stageId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/stage"
+            }
+          },
+          "404": {
+            "description": "Stage not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "stages"
+        ],
+        "summary": "Delete stage",
+        "description": "",
+        "operationId": "DeleteStage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "stageId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          }
+        }
+      }
+    },
+    "/league": {
+      "post": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Create league",
+        "description": "",
+        "operationId": "createLeague",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created league object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/league"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Get leagues",
+        "description": "get list of all existing leagues",
+        "operationId": "getAllLeagues",
+        "responses": {
+          "200": {
+            "description": "sucsessful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/league"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Update leagues",
+        "description": "",
+        "operationId": "UpdateLeagues",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update stage leagues",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/league"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}": {
+      "get": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Find league by ID",
+        "description": "Returns a single league",
+        "operationId": "getLeagueById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/league"
+            }
+          },
+          "404": {
+            "description": "League not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Delete league",
+        "description": "",
+        "operationId": "DeleteLeague",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          }
+        }
+      }
+    },
+    "/race": {
+      "post": {
+        "tags": [
+          "races"
+        ],
+        "summary": "Create race",
+        "description": "",
+        "operationId": "createRace",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created race object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/race"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "races"
+        ],
+        "summary": "Get races",
+        "description": "get list of all existing races",
+        "operationId": "getAllRaces",
+        "responses": {
+          "200": {
+            "description": "sucsessful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/race"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "races"
+        ],
+        "summary": "Update races",
+        "description": "",
+        "operationId": "UpdateRaces",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Update stage races",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/race"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/race/{raceId}": {
+      "get": {
+        "tags": [
+          "races"
+        ],
+        "summary": "Find race by ID",
+        "description": "Returns a single race",
+        "operationId": "getRaceById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "raceId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/race"
+            }
+          },
+          "404": {
+            "description": "Race not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "races"
+        ],
+        "summary": "Delete race",
+        "description": "",
+        "operationId": "DeleteRace",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "raceId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          }
+        }
+      }
+    },
+    "/league/{season}": {
+      "get": {
+        "tags": [
+          "races"
+        ],
+        "summary": "provides a list of races into list of stage for a specific league season",
+        "description": "",
+        "operationId": "getRacesWithStage",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "404": {
+            "description": "Races not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "coords": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "league": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "league": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "season": {
+          "type": "string",
+          "enum": [
+            "Winter",
+            "Spring",
+            "Autumn",
+            "Summer"
+          ]
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "race": {
+      "type": "object",
+      "properties": {
+        "place": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server on node",
+  "main": "index.js",
+  "scripts": {
+    "build": "env-cmd -f ./config/start.env node ../backend/src/index.js",
+    "swag": "swagger-inline backend/src/routers/*.js --base ./swaggerBase.json --out ./swagger.json",
+    "dev": "nodemon ../backend/src/index.js",
+    "mongo": "/Users/user/mongodb/bin/mongod.exe --dbpath=/Users/user/mongodb-data"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^16.1.4",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.9.9",
+    "swagger-ui-express": "^4.1.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}
